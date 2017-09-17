@@ -1,0 +1,207 @@
+@import url("http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700");
+
+body {
+	font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	background-color: #f1f3f6;
+	font-size: 13px;
+	color: #6a6c6f;
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+
+h1, .h1, h2, .h2, h3, .h3 {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-weight: 200;
+}
+
+a {
+	cursor: pointer;
+	color: #34495e;
+}
+
+/*
+ * FONTS
+ */
+.font-light { font-weight:300; }
+.font-normal { font-weight:400; }
+.font-bold { font-weight:600; }
+.font-extra-bold { font-weight:700; }
+.font-uppercase { text-transform:uppercase; }
+.font-trans { opacity:0.5 !important; }
+
+/*
+ * PADDINGS
+ */
+.p-xxs { padding:5px !important; }
+.p-xs { padding:10px !important; }
+.p-sm { padding:15px !important; }
+.p-m { padding:20px !important; }
+.p-md { padding:25px !important; }
+.p-lg { padding:30px !important; }
+.p-xl { padding:40px !important; }
+
+/*
+ * MARGINS
+ */
+.m-xxs { margin:2px 4px; }
+.m-xs { margin:5px; }
+.m-sm { margin:10px; }
+.m { margin:15px; }
+.m-md { margin:20px; }
+.m-lg { margin:30px; }
+.m-xl { margin:50px; }
+.m-n { margin:0 !important; }
+.m-l-none { margin-left:0; }
+.m-l-xs { margin-left:5px; }
+.m-l-sm { margin-left:10px; }
+.m-l { margin-left:15px; }
+.m-l-md { margin-left:20px; }
+.m-l-lg { margin-left:30px; }
+.m-l-xl { margin-left:40px; }
+.m-t-none { margin-top:0; }
+.m-t-xxs { margin-top:1px; }
+.m-t-xs { margin-top:5px; }
+.m-t-sm { margin-top:10px; }
+.m-t { margin-top:15px; }
+.m-t-md { margin-top:20px; }
+.m-t-lg { margin-top:30px; }
+.m-t-xl { margin-top:40px; }
+.m-t-xxl { margin-top:50px; }
+.m-t-xxxl { margin-top:60px; }
+.m-r-none { margin-right:0; }
+.m-r-xxs { margin-right:1px; }
+.m-r-xs { margin-right:5px; }
+.m-r-sm { margin-right:10px; }
+.m-r { margin-right:15px; }
+.m-r-md { margin-right:20px; }
+.m-r-lg { margin-right:30px; }
+.m-r-xl { margin-right:40px; }
+.m-b-none { margin-bottom:0; }
+.m-b-xxs { margin-bottom:1px; }
+.m-b-xs { margin-bottom:5px; }
+.m-b-sm { margin-bottom:10px; }
+.m-b { margin-bottom:15px; }
+.m-b-md { margin-bottom:20px; }
+.m-b-lg { margin-bottom:30px; }
+.m-b-xl { margin-bottom:40px; }
+
+/*
+ * FONT SIZES
+ */
+.fs-10 { font-size:10px !important; }
+.fs-11 { font-size:11px !important; }
+.fs-12 { font-size:12px !important; }
+.fs-13 { font-size:13px !important; }
+.fs-14 { font-size:14px !important; }
+.fs-15 { font-size:15px !important; }
+.fs-16 { font-size:16px !important; }
+.fs-18 { font-size:18px !important; }
+.fs-20 { font-size:20px !important; }
+.fs-22 { font-size:22px !important; }
+.fs-24 { font-size:24px !important; }
+.fs-26 { font-size:26px !important; }
+.fs-28 { font-size:28px !important; }
+.fs-30 { font-size:30px !important; }
+
+.content {
+	padding: 75px 40px 40px 40px;
+	min-width: 320px;
+}
+
+.login-container {
+	max-width: 420px;
+	margin: auto;
+	padding-top: 8%;
+}
+
+.g-signin2 { width:100%; }
+.g-signin2 > div { margin:0 auto; }
+
+/*
+ * PANELS
+ */
+.panel-group {
+	border: none;
+	box-shadow: none;
+	margin-bottom: 25px;
+}
+
+.panel-group .panel-body {
+	background: #fff;
+	border: 1px solid #e4e5e7;
+	border-radius: 2px;
+	padding: 20px;
+	position: relative;
+}
+
+.panel-body h4, .panel-body h5 {
+	font-weight: 600;
+}
+
+.panel-link {
+	position: relative;
+}
+
+.panel-link:hover {
+	background: #f7f9fa;
+}
+
+.panel-link.active {
+	background: #d8e1e6;
+}
+
+.panel-link.active a {
+	color: #46627f;
+}
+
+.toast-top-center {
+	top: 100px;
+}
+
+.profile-container {}
+.profile-image { display:inline-block; margin-right:10px; }
+.profile-image img { border-radius:50px; height:30px; }
+.profile-name { display:inline-block; line-height:30px; color:#ddd; margin-right:25px; font-size:14px; font-weight:600; }
+
+.edit-container .edit-tools {
+	position: absolute;
+	right: 0;
+	top: 33%;
+}
+
+.edit-tools a {
+	display: inline-block;
+	margin-right: 6px;
+	font-size: 16px;
+}
+
+.edit-tools .fa-edit { color:blue; }
+.edit-tools .fa-trash-o { color:red; }
+
+
+/*
+ * BADGE COLORS
+ */
+.badge.badge-success { background-color:#62cb31; }
+.badge.badge-info { background-color:#3498db; }
+.badge.badge-danger { background-color:#e74c3c; }
+.badge.badge-warning { background-color:#ffb606; }
+.badge.badge-primary { background-color:#34495e; }
+
+
+/*
+ * FORM ERRORS
+ */
+label.error, label span.error {
+	color: #e74c3c;
+	margin: 5px 0 0 0;
+	font-weight: 400;
+}
+
+
+
+
+
+

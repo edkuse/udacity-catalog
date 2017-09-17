@@ -1,0 +1,331 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-3">
+		<h2 class="font-light">
+			Artists
+		</h2>
+
+		<div class="panel-group">
+			<div id="artists">
+				{% for artist in artists %}
+					<div class="panel-body panel-link edit-container">
+						<a href="#artist{{ artist['id'] }}" data-toggle="tab">
+							<h5>{{ artist['name'] }}</h5>
+						</a>
+						{% if logged_in %}
+							<div class="edit-tools">
+								<a href="#modal-artist-edit" title="Edit Artist" 
+								   data-toggle="modal" class="artist-edit" 
+								   data-id="{{ artist['id'] }}"
+								   data-name="{{ artist['name'] }}">
+									<i class="fa fa-edit"></i>
+								</a>
+
+								{% if artist['user'] == session['user'] %}
+									<a href="#" title="Remove Artist" class="artist-remove" data-id="{{ artist['id'] }}">
+										<i class="fa fa-trash-o"></i>
+									</a>
+								{% endif %}
+							</div>
+						{% endif %}
+					</div>
+				{% endfor %}
+
+				{% if logged_in %}
+					<div class="text-center m-t-sm">
+						<i class="fa fa-plus"></i> 
+						<a href="#modal-artist-add" title="Add Artist" 
+						   data-toggle="modal" class="artist-add fs-16 font-bold">
+							Add Artist
+						</a>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	<div class="col-md-9">
+		<h2 class="font-light">
+			Concert Videos
+		</h2>
+
+		<div class="panel-group">
+			<div class="panel-body">
+				<div class="tab-content">
+					{% for artist in videos %}
+						<div id="artist{{ artist['id'] }}" class="tab-pane">
+							{% for video in artist['videos'] %}
+								<div class="video m-b-xl">
+									<div class="pull-right">
+										<button type="button" class="btn btn-success btn-xs view-tracks"
+												data-id="{{ video['id'] }}">
+											View Tracks
+										</button>
+									</div>
+									<h3 class="m-b-none">
+										{{ video['title'] }} <small>({{ video['year'] }})</small>
+									</h3>
+									{% if logged_in %}
+										<div class="edit-tools">
+											<a href="#modal-video-edit" title="Edit Video" 
+											   data-toggle="modal" class="video-edit" 
+											   data-artist="{{ artist['name'] }}" 
+											   data-artistid="{{ artist['id'] }}"
+											   data-id="{{ video['id'] }}"
+											   data-name="{{ video['title'] }}"
+											   data-year="{{ video['year'] }}">
+												<i class="fa fa-edit"></i>
+											</a>
+
+											{% if video['user'] == session['user'] %}
+												<a href="#" title="Remove Video" class="video-remove" data-id="{{ video['id'] }}">
+													<i class="fa fa-trash-o"></i>
+												</a>
+											{% endif %}
+										</div>
+									{% endif %}
+									<div class="video-content m-t-sm"></div>
+								</div>
+							{% endfor %}
+
+							{% if logged_in %}
+								<div class="m-t-sm">
+									<i class="fa fa-plus"></i> 
+									<a href="#modal-video-add" title="Add Concert Video" 
+									   data-toggle="modal" class="video-add fs-16 font-bold" 
+									   data-artistid="{{ artist['id'] }}"
+									   data-artistname="{{ artist['name'] }}">
+										Add Video
+									</a>
+								</div>
+							{% endif %}
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% if logged_in %}
+	{% include 'modals.html' %}
+{% endif %}
+{% endblock %}
+
+{% block js %}
+<script>
+	$(function() {
+		var loading = '<div class="text-center p-lg"><i class="fa fa-refresh fa-spin fa-2x fa-fw"></i></div>';
+		var artists = $('#artists');
+
+		// SET HIGHLIGHTING FOR ACTIVE TAB WHEN SHOWN
+		$('a[data-toggle="tab"]', artists).on('shown.bs.tab', function(e) {
+			$('.active', artists).removeClass('active');
+			$(this).parents('.panel-link').addClass('active');
+		});
+
+		// SET THE FIRST ARTIST TAB AS ACTIVE BY DEFAULT ON PAGE LOAD OR 
+		// LOOK IF HASH EXISTS AND LOAD THAT TAB
+		// Assisted by answer from https://stackoverflow.com/questions/7862233/twitter-bootstrap-tabs-go-to-specific-tab-on-page-reload-or-hyperlink
+		var hash = document.location.hash;
+		if (hash) {
+			$('a[data-toggle="tab"][href="' + hash + '"]').trigger('click');
+		} else {
+			$('a[data-toggle="tab"]:first', artists).trigger('click');
+		}
+
+		// TOGGLE TRACK LISTING WHEN BUTTON CLICKED
+		$('.view-tracks').on('click', function() {
+			var btn = $(this),
+				video_id = btn.data('id'),
+				content = btn.closest('.video').find('.video-content');
+
+			btn.blur();
+
+			if (content.html() == '') {
+				content.html(loading).load(
+					'/video/tracks',
+					{'id': video_id}
+				);
+
+				btn.text('Hide Tracks');
+			} else {
+				content.empty();
+				btn.text('View Tracks');
+			}
+		});
+
+		// CLEAR AND RESET FORM WHENEVER MODAL IS SHOWN
+		$('.modal').on('show.bs.modal', function(e) {
+			var a = $(e.relatedTarget),
+				form = $(this).find('form');
+
+			form[0].reset();
+
+			// Updating Artists
+			if (a.hasClass('artist-edit')) {
+				$('input[name="artist"]', form).val(a.data('name'));
+				$('input[name="id"]', form).val(a.data('id'));
+
+			// Adding Videos
+			} else if (a.hasClass('video-add')) {
+				$('input[name="artist"]', form).val(a.data('artistname'));
+				$('input[name="artistid"]', form).val(a.data('artistid'));
+			
+			// Updating Videos
+			} else if (a.hasClass('video-edit')) {
+				$('input[name="artist"]', form).val(a.data('artist'));
+				$('input[name="artistid"]', form).val(a.data('artistid'));
+				$('input[name="video"]', form).val(a.data('name'));
+				$('input[name="year"]', form).val(a.data('year'));
+				$('input[name="id"]', form).val(a.data('id'));
+			
+			// Add Tracks
+			} else if (a.hasClass('track-add')) {
+				$('input[name="artist"]', form).val(a.data('artistname'));
+				$('input[name="artistid"]', form).val(a.data('artistid'));
+				$('input[name="video"]', form).val(a.data('videotitle') + ' (' + a.data('videoyear') + ')');
+				$('input[name="videoid"]', form).val(a.data('videoid'));
+
+			// Updating Tracks
+			} else if (a.hasClass('track-edit')) {
+				$('input[name="artist"]', form).val(a.data('artistname'));
+				$('input[name="artistid"]', form).val(a.data('artistid'));
+				$('input[name="video"]', form).val(a.data('videotitle') + ' (' + a.data('videoyear') + ')');
+				$('input[name="videoid"]', form).val(a.data('videoid'));
+				$('input[name="tracknum"]', form).val(a.data('tracknum'));
+				$('input[name="tracktitle"]', form).val(a.data('tracktitle'));
+				$('input[name="id"]', form).val(a.data('trackid'));
+			}
+		});
+
+		// VALIDATE MODAL FORM
+		$('.submit-modal').on('click', function() {
+			var form = $(this).parents('.modal-content').find('form');
+
+			form.validate();
+			if (form.valid()) {
+				form.submit();
+			}
+		});
+
+		// REMOVE ARTIST
+		$('.artist-remove').on('click', function(e) {
+			e.preventDefault();
+
+			var id = $(this).data('id'),
+				panel = $(this).parents('.panel-body');
+
+			// Remove artist using ajax, first confirm with user
+			swal({
+				title: "Are you sure you want to remove artist?",
+				text: "Please Confirm",
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Yes, remove!",
+				cancelButtonText: "Cancel"
+			},
+			function(confirmed) {
+				if (confirmed) {
+					$.post(
+						'/artist/delete',
+						{'id': id},
+						function(response) {
+							if (response.result) {
+								panel.fadeOut(1200, function() {$(this).remove();});
+								toastr['success']('Artist has been removed!');
+							} else {
+								swal(
+									'Oops...',
+									response.error,
+									'error'
+								);
+							}
+						}
+					);
+				}
+			});
+		});
+
+		// REMOVE VIDEO
+		$('.video-remove').on('click', function(e) {
+			e.preventDefault();
+
+			var id = $(this).data('id'),
+				div = $(this).parents('.video');
+
+			// Remove video using ajax, first confirm with user
+			swal({
+				title: "Are you sure you want to remove video?",
+				text: "Please Confirm",
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Yes, remove!",
+				cancelButtonText: "Cancel"
+			},
+			function(confirmed) {
+				if (confirmed) {
+					$.post(
+						'/video/delete',
+						{'id': id},
+						function(response) {
+							if (response.result) {
+								div.fadeOut(1200, function() {$(this).remove();});
+								toastr['success']('Video has been removed!');
+							} else {
+								swal(
+									'Oops...',
+									response.error,
+									'error'
+								);
+							}
+						}
+					);
+				}
+			});
+		});
+
+		// REMOVE TRACK
+		$('body').on('click', '.track-remove', function(e) {
+			e.preventDefault();
+
+			var id = $(this).data('id'),
+				li = $(this).parents('li');
+
+			// Remove track using ajax, first confirm with user
+			swal({
+				title: "Are you sure you want to remove track?",
+				text: "Please Confirm",
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Yes, remove!",
+				cancelButtonText: "Cancel"
+			},
+			function(confirmed) {
+				if (confirmed) {
+					$.post(
+						'/track/delete',
+						{'id': id},
+						function(response) {
+							if (response.result) {
+								li.fadeOut(1200, function() {$(this).remove();});
+								toastr['success']('Track has been removed!');
+							} else {
+								swal(
+									'Oops...',
+									response.error,
+									'error'
+								);
+							}
+						}
+					);
+				}
+			});
+		});
+	});
+</script>
+{% endblock %}

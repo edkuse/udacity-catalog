@@ -1,0 +1,50 @@
+
+{% if not tracks.count() %}
+	<div class="alert alert-warning">
+		No tracks exist yet for concert video.
+	</div>
+{% else %}
+	<ul class="list-group">
+		{% for track in tracks %}
+			<li class="list-group-item edit-container">
+				<span class="badge badge-info pull-left m-r-sm">{{ "%02d" % track.track_num }}</span>
+				{{ track.title }}
+
+				{% if logged_in %}
+					<div class="edit-tools">
+						<a href="#modal-track-edit" title="Edit Track" 
+						   data-toggle="modal" class="track-edit"  
+						   data-videoid="{{ video.id }}"
+						   data-videotitle="{{ video.title }}"
+		   				   data-videoyear="{{ video.year }}"
+						   data-artistid="{{ artist.id }}"
+						   data-artistname="{{ artist.name }}"
+						   data-tracknum="{{ track.track_num }}"
+						   data-tracktitle="{{ track.title }}"
+						   data-trackid="{{ track.id }}">
+							<i class="fa fa-edit"></i>
+						</a>
+						<a href="#" title="Remove Track" class="track-remove" data-id="{{ track.id }}">
+							<i class="fa fa-trash-o"></i>
+						</a>
+					</div>
+				{% endif %}
+			</li>
+		{% endfor %}
+	</ul>
+{% endif %}
+
+{% if logged_in %}
+	<div>
+		<i class="fa fa-plus"></i> 
+		<a href="#modal-track-add" title="Add Track" 
+		   data-toggle="modal" class="track-add fs-14 font-bold" 
+		   data-videoid="{{ video.id }}"
+		   data-videotitle="{{ video.title }}"
+		   data-videoyear="{{ video.year }}"
+		   data-artistid="{{ artist.id }}"
+		   data-artistname="{{ artist.name }}">
+			Add Track
+		</a>
+	</div>
+{% endif %}

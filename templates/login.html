@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="login-container">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel-group">
+				<div class="panel-body p-xl">
+
+					<!-- GOOGLE SIGN IN BUTTON -->
+					<div class="g-signin2"
+						 data-width="240" 
+						 data-height="50" 
+						 data-longtitle="true"
+						 data-theme="dark"
+						 data-onsuccess="onSignIn"></div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+	$(function() {
+		// MAKE SURE LOGIN BUTTON IS HIDDEN
+		$('.login').hide();
+	});
+</script>
+{% endblock %}
+
