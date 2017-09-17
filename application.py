@@ -24,7 +24,10 @@ CLIENT_ID = json.loads(
 )['web']['client_id']
 
 # CONNECT TO DB AND CREATE DB SESSION
-engine = create_engine('sqlite:///concertvideocatalog.db')
+engine = create_engine(
+	'postgresql+psycopg2://catalog:udacity@localhost/catalog',
+	isolation_level='READ UNCOMMITTED'
+)
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -440,5 +443,5 @@ def create_user(data):
 if __name__ == '__main__':
 	app.secret_key = 'super_secret_key'
 	app.debug = True
-	app.run(host='0.0.0.0', port=8000)
+	app.run(host='0.0.0.0', port=80)
 	
